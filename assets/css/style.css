@@ -1253,28 +1253,337 @@ img {
   color: #ffffff;
 }
 
-/* Contact: inquiry form panel reveal + cross-fade */
+/* InquiryForm.html: "coming soon" message fade-in */
 
-#inquiry-form-panel {
+#inquiry-pending-message {
   opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateY(12px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
-#inquiry-form-panel.is-visible {
+#inquiry-pending-message.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-#inquiry-form-ready,
-#inquiry-form-pending {
-  opacity: 0;
-  transition: opacity 0.4s ease;
+/* ---------- Hearing Sheet Form (Inquiry-Restaurant.html etc.) ---------- */
+
+.hearing-intro {
+  max-width: 720px;
+  margin: 0 auto 48px;
+  font-size: 13.5px;
+  line-height: 2;
+  color: #5a5a56;
 }
 
-#inquiry-form-ready.is-visible,
-#inquiry-form-pending.is-visible {
-  opacity: 1;
+.hearing-intro__notes {
+  margin: 28px 0 0;
+  padding: 24px 28px;
+  background: #f7f7f5;
+  border-radius: 6px;
+  font-size: 12.5px;
+  line-height: 1.9;
+  color: #6a6a66;
+  list-style: none;
+}
+
+.hearing-intro__notes li {
+  margin-bottom: 6px;
+  padding-left: 16px;
+  position: relative;
+}
+
+.hearing-intro__notes li::before {
+  content: "・";
+  position: absolute;
+  left: 0;
+}
+
+.hearing-intro__contact {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  font-size: 13px;
+  color: #1e3a2b;
+  font-weight: 600;
+}
+
+.hearing-intro__contact img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.hearing-form {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.hearing-session {
+  padding: 56px 0;
+  border-top: 1px solid #ececea;
+}
+
+.hearing-session:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.hearing-session__eyebrow {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  color: #1e3a2b;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.hearing-session__title {
+  font-size: 22px;
+  font-weight: 700;
+  font-family: 'Shippori Mincho', serif;
+  margin: 0 0 12px;
+}
+
+.hearing-session__desc {
+  font-size: 13px;
+  line-height: 1.9;
+  color: #767672;
+  margin: 0 0 40px;
+  max-width: 560px;
+}
+
+.hearing-field {
+  margin-bottom: 36px;
+}
+
+.hearing-field__label {
+  display: block;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 10px;
+  line-height: 1.7;
+}
+
+.hearing-field__required,
+.hearing-field__optional {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 999px;
+  vertical-align: middle;
+}
+
+.hearing-field__required {
+  color: #ffffff;
+  background: #a8503a;
+}
+
+.hearing-field__optional {
+  color: #767672;
+  font-weight: 500;
+  border: 1px solid #d8d8d4;
+}
+
+.hearing-field__note {
+  font-size: 12px;
+  color: #8a8a86;
+  margin: 6px 0 0;
+  line-height: 1.7;
+}
+
+.hearing-field__sublabel {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #4a4a48;
+  margin: 18px 0 6px;
+}
+
+.hearing-field__sublabel:first-of-type {
+  margin-top: 6px;
+}
+
+.hearing-input,
+.hearing-textarea {
+  width: 100%;
+  padding: 13px 16px;
+  border: 1px solid #d8d8d4;
+  border-radius: 4px;
+  font-size: 13.5px;
+  font-family: inherit;
+  color: #1a1a1a;
+  background: #ffffff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hearing-input:focus,
+.hearing-textarea:focus {
+  outline: none;
+  border-color: #1e3a2b;
+  box-shadow: 0 0 0 3px rgba(30, 58, 43, 0.1);
+}
+
+.hearing-textarea {
+  min-height: 88px;
+  resize: vertical;
+  line-height: 1.8;
+}
+
+.hearing-checkbox-group,
+.hearing-radio-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px 20px;
+}
+
+.hearing-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: #4a4a48;
+  cursor: pointer;
+  padding: 6px 0;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.hearing-option:hover {
+  color: #1e3a2b;
+  transform: translateX(3px);
+}
+
+.hearing-option input[type="checkbox"],
+.hearing-option input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid #d8d8d4;
+  flex-shrink: 0;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.25s ease, background 0.25s ease, transform 0.15s ease;
+}
+
+.hearing-option input[type="checkbox"] {
+  border-radius: 4px;
+}
+
+.hearing-option input[type="radio"] {
+  border-radius: 50%;
+}
+
+.hearing-option input[type="checkbox"]:checked,
+.hearing-option input[type="radio"]:checked {
+  border-color: #1e3a2b;
+  background: #1e3a2b;
+  transform: scale(1.08);
+}
+
+.hearing-option input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 5px;
+  height: 9px;
+  border: solid #ffffff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.hearing-option input[type="radio"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+.hearing-competitor-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.hearing-competitor-row__num {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e3a2b;
+  width: 20px;
+  flex-shrink: 0;
+}
+
+.hearing-file {
+  padding: 28px;
+  border: 1.5px dashed #d8d8d4;
+  border-radius: 6px;
+  text-align: center;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.hearing-file:hover {
+  border-color: #1e3a2b;
+  background: #f7f7f5;
+}
+
+.hearing-file input[type="file"] {
+  font-size: 12.5px;
+  color: #4a4a48;
+}
+
+.hearing-submit {
+  margin-top: 8px;
+  padding: 40px 0 0;
+  text-align: center;
+}
+
+.hearing-submit-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 52px;
+  border: none;
+  border-radius: 999px;
+  background: #1e3a2b;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.hearing-submit-btn:hover {
+  background: #16291d;
+  transform: translateY(-3px);
+  box-shadow: 0 18px 36px rgba(30, 58, 43, 0.28);
+}
+
+.hearing-submit-btn__arrow {
+  display: inline-block;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hearing-submit-btn:hover .hearing-submit-btn__arrow {
+  transform: translateX(6px);
+}
+
+.hearing-honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }
 
 /* Works: grid card */
@@ -1622,6 +1931,10 @@ img {
   /* Line-breaks that only exist to control line length on wide desktop
      copy — let paragraph text wrap naturally at narrow widths instead. */
   br.br-desktop { display: none; }
+
+  /* Hearing sheet form: single column on mobile */
+  .hearing-checkbox-group,
+  .hearing-radio-group { grid-template-columns: 1fr; }
 
   /* Nav → hamburger */
   .nav { padding-left: 20px !important; padding-right: 20px !important; height: 68px; }

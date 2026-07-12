@@ -55,29 +55,24 @@
 })();
 
 /**
- * Contact.html: inquiry form category picker.
- * Selecting a category shows the matching Google Form (embedded via iframe).
- * Categories without a form yet fall back to a "coming soon" message.
+ * InquiryForm.html: inquiry form category picker.
+ * Selecting a category navigates to that category's dedicated form page
+ * (a native page on this site, e.g. Inquiry-Restaurant.html). Categories
+ * without a form yet show a "coming soon" message instead.
  *
  * To add a new category's form once it's ready, just add an entry below:
- *   '業種名': 'https://docs.google.com/forms/d/e/FORM_ID/viewform?embedded=true'
+ *   '業種名': 'PageName.html'
  */
 (function () {
-  var panel = document.getElementById('inquiry-form-panel');
-  if (!panel) return;
-
   var buttons = document.querySelectorAll('#inquiry-category-list .filter-pill');
-  var iframe = document.getElementById('inquiry-form-iframe');
-  var readyBox = document.getElementById('inquiry-form-ready');
-  var pendingBox = document.getElementById('inquiry-form-pending');
+  if (!buttons.length) return;
+
+  var pendingMsg = document.getElementById('inquiry-pending-message');
 
   var categoryForms = {
-    '飲食店（レストラン・居酒屋・カフェ）': 'https://docs.google.com/forms/d/e/1FAIpQLSfyZJvlIRPp8xwu9WE17kDl5J7GPHcLzTnGCVizyxI9xz1l4w/viewform?embedded=true'
+    '飲食店（レストラン・居酒屋・カフェ）': 'Inquiry-Restaurant.html'
   };
 
-  // Fades an element in by toggling display + a CSS transition class,
-  // forcing a reflow in between so the transition re-triggers every time
-  // (even if the element was already visible for a different category).
   function fadeIn(el) {
     el.classList.remove('is-visible');
     el.style.display = 'block';
@@ -100,19 +95,13 @@
       var category = btn.getAttribute('data-category');
       var url = categoryForms[category];
 
-      fadeIn(panel);
-
       if (url) {
-        iframe.src = url;
-        fadeIn(readyBox);
-        fadeOut(pendingBox);
-      } else {
-        iframe.src = '';
-        fadeOut(readyBox);
-        fadeIn(pendingBox);
+        if (pendingMsg) fadeOut(pendingMsg);
+        window.location.href = url;
+      } else if (pendingMsg) {
+        fadeIn(pendingMsg);
+        pendingMsg.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
-
-      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
 })();
