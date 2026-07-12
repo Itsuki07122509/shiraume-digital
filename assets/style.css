@@ -8,6 +8,12 @@
   box-sizing: border-box;
 }
 
+/* Hidden by default; shown only on phones (see mobile media query) —
+   used for forcing a short, safe break in long hero titles. */
+br.br-mobile {
+  display: none;
+}
+
 html {
   overflow-x: hidden;
 }
@@ -430,11 +436,16 @@ img {
   background: #f7f7f5;
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
-  gap: 80px;
+  grid-template-areas:
+    "heading image"
+    "body    image";
+  column-gap: 80px;
+  row-gap: 44px;
   align-items: center;
 }
 
-.strengths__text {
+.strengths__body {
+  grid-area: body;
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -442,6 +453,8 @@ img {
 }
 
 .strengths__heading {
+  grid-area: heading;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -490,6 +503,7 @@ img {
 }
 
 .strengths__image {
+  grid-area: image;
   min-width: 0;
   border-radius: 6px;
   overflow: hidden;
@@ -913,15 +927,16 @@ img {
 .block-title--28 { font-size: 28px; }
 
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; }
-.grid-company { display: grid; grid-template-columns: 1.1fr 0.9fr; }
 .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); }
 .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); }
 .grid-6 { display: grid; grid-template-columns: repeat(6, 1fr); }
 
-/* About.html: INTRO section — heading first, then photo, then the
-   description paragraphs, so on mobile it stacks in reading order
-   instead of dumping the photo after all the text. */
-.about-intro-grid {
+/* About.html: INTRO / VISION / COMPANY sections — heading first, then
+   photo, then the body text, so on mobile each stacks in reading order
+   instead of dumping the photo after (or before) all the text. Desktop
+   keeps the original text-left / photo-right two-column look. */
+.about-intro-grid,
+.about-vision-grid {
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
   grid-template-areas:
@@ -931,9 +946,26 @@ img {
   row-gap: 22px;
   align-items: center;
 }
-.about-intro-grid__heading { grid-area: heading; min-width: 0; display: flex; flex-direction: column; gap: 22px; }
-.about-intro-grid__image { grid-area: image; min-width: 0; }
-.about-intro-grid__body { grid-area: body; min-width: 0; display: flex; flex-direction: column; gap: 18px; }
+
+.grid-company {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  grid-template-areas:
+    "heading image"
+    "body    image";
+  column-gap: 72px;
+  row-gap: 22px;
+  align-items: end;
+}
+
+.about-block__heading { grid-area: heading; min-width: 0; display: flex; flex-direction: column; gap: 22px; }
+.about-block__image { grid-area: image; min-width: 0; }
+.about-block__body { grid-area: body; min-width: 0; display: flex; flex-direction: column; gap: 18px; }
+
+/* COMPANY's body is a list of info-rows that already space themselves
+   via padding/border, so it doesn't need the flex gap the other
+   sections' paragraph bodies use. */
+.grid-company .about-block__body { gap: 0; }
 
 /* ==========================================================================
    Sub-pages (About / Services / Works / Pricing / Contact)
@@ -1994,14 +2026,14 @@ img {
   .hero { height: 620px; }
   .hero__title { font-size: 60px; }
 
-  .strengths { gap: 40px; }
+  .strengths { grid-template-columns: 1fr; grid-template-areas: "heading" "image" "body"; row-gap: 32px; }
   .strengths__list { width: 100%; height: auto; }
-  .strengths__image img { width: 100%; height: 100%; min-height: 320px; object-fit: cover; }
+  .strengths__image img { width: 100%; height: auto; object-fit: contain; }
   .feature-photo { height: auto !important; object-fit: contain !important; }
 
   .grid-2 { grid-template-columns: 1fr; }
   .about-vision-grid,
-  .grid-company { grid-template-columns: 1fr 1fr !important; gap: 40px !important; }
+  .grid-company { grid-template-columns: 1fr; grid-template-areas: "heading" "image" "body"; row-gap: 24px; }
   .about-intro-grid { grid-template-columns: 1fr; grid-template-areas: "heading" "image" "body"; row-gap: 24px; }
   .service-block-grid { grid-template-columns: 1fr; grid-template-areas: "heading" "photo" "body"; row-gap: 18px; }
 }
@@ -2014,6 +2046,12 @@ img {
   /* Line-breaks that only exist to control line length on wide desktop
      copy — let paragraph text wrap naturally at narrow widths instead. */
   br.br-desktop { display: none; }
+
+  /* Opposite of br-desktop: hidden everywhere by default (see base
+     stylesheet), shown only on phones — used for long hero titles where
+     the natural wrap point still renders a line too wide for narrow
+     screens, so we force a shorter, safe break instead. */
+  br.br-mobile { display: inline; }
 
   /* Hearing sheet form: single column on mobile */
   .hearing-checkbox-group,
@@ -2054,7 +2092,7 @@ img {
 
   .subhero--460, .subhero--420 { height: 340px; }
   .subhero__content { padding-left: 20px !important; padding-right: 20px !important; gap: 16px; }
-  .subhero__title--46, .subhero__title--42 { font-size: 30px; line-height: 1.5; }
+  .subhero__title--46, .subhero__title--42 { font-size: 22px; line-height: 1.5; }
   .subhero__desc { font-size: 13.5px; max-width: 100%; }
 
   .simple-hero { padding-left: 20px !important; padding-right: 20px !important; }
@@ -2109,13 +2147,11 @@ img {
   }
   .service-photo-frame { box-shadow: 0 10px 24px rgba(20,20,18,0.08); }
 
-  /* About.html VISION section + COMPANY section: stay side-by-side
-     (text left / photo right) on phones instead of collapsing. */
-  .about-vision-grid { grid-template-columns: 1fr 1fr !important; gap: 20px !important; align-items: center !important; }
-  .about-vision-grid h2 { font-size: 20px !important; }
-  .about-vision-grid p { font-size: 12px !important; }
-
-  .grid-company { grid-template-columns: 1fr 1fr !important; gap: 16px !important; align-items: end !important; }
+  /* About.html VISION section + COMPANY section: stack as
+     heading → photo → body, same as INTRO, for a consistent feel. */
+  .about-vision-grid,
+  .grid-company { grid-template-columns: 1fr; grid-template-areas: "heading" "image" "body"; row-gap: 20px; }
+  .about-vision-grid h2,
   .grid-company h2 { font-size: 20px !important; }
   .info-row { grid-template-columns: 1fr; gap: 4px; padding: 14px 0; }
   .info-row__label { font-size: 11px; }
@@ -2124,19 +2160,13 @@ img {
   /* About.html INTRO section: heading, then photo, then description. */
   .about-intro-grid { grid-template-columns: 1fr; grid-template-areas: "heading" "image" "body"; row-gap: 20px; }
 
-  /* Strengths: stay side-by-side (text left / photo right) even on
-     phones, per request — just tighten proportions so the text column
-     stays readable at narrow widths. */
-  .strengths { grid-template-columns: 1fr 1fr; column-gap: 16px; row-gap: 0; }
-  .strengths__list { width: 100%; height: auto; gap: 16px; }
-  .strengths__list .strength-item__title { font-size: 13px; }
-  .strengths__list .strength-item__desc { font-size: 11px; line-height: 1.6; }
-  .strengths__list .strength-item__icon { width: 22px; height: 22px; }
-  .strengths__list .strength-item { gap: 10px; }
-  .strengths__heading .section-heading__title { font-size: 20px; }
-  .strengths__image img { width: 100%; height: 100%; min-height: 200px; object-fit: cover; }
-  .strengths__image { box-shadow: 0 10px 22px rgba(20,20,18,0.10); }
-  .strengths__more .btn-more { padding: 10px 18px; font-size: 12.5px; }
+  /* Strengths: heading → photo → detail list, stacked (matches the
+     About page sections above for a consistent mobile feel). */
+  .strengths { grid-template-columns: 1fr; grid-template-areas: "heading" "image" "body"; row-gap: 24px; }
+  .strengths__list { width: 100%; height: auto; gap: 20px; }
+  .strengths__heading .section-heading__title { font-size: 22px; }
+  .strengths__image img { width: 100%; height: auto; object-fit: contain; }
+  .strengths__image { box-shadow: 0 12px 28px rgba(20,20,18,0.10); }
 
   .flow-step--top, .flow-step--bottom { padding: 24px 0 !important; border-right: none !important; }
   .flow-step--bordered { border-right: none; }
@@ -2171,7 +2201,7 @@ img {
 @media (max-width: 480px) {
   .hero { height: 540px; }
   .hero__title { font-size: 40px; }
-  .subhero__title--46, .subhero__title--42 { font-size: 26px; }
+  .subhero__title--46, .subhero__title--42 { font-size: 20px; }
   .simple-hero__title--38, .simple-hero__title--36 { font-size: 26px; }
   .section-heading__title { font-size: 26px; }
   .cta__title { font-size: 23px; }
