@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>お問い合わせフォーム | Shiraume Digital</title>
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://shiraumedigital.com/InquiryForm.html">
+<meta property="og:title" content="お問い合わせフォーム | Shiraume Digital">
+<meta property="og:description" content="ご希望の分野を選択いただくと、専用のお問い合わせフォームに移動します。">
+<meta property="og:image" content="https://shiraumedigital.com/assets/images/og-image.png">
+<meta property="og:site_name" content="Shiraume Digital">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="お問い合わせフォーム | Shiraume Digital">
+<meta name="twitter:description" content="ご希望の分野を選択いただくと、専用のお問い合わせフォームに移動します。">
+<meta name="twitter:image" content="https://shiraumedigital.com/assets/images/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&family=Shippori+Mincho:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon-180.png">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div class="page">
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="index.html" class="nav__brand">
+      <img class="nav__logo" src="assets/images/shiraume-symbol-mark.png" alt="Shiraume Digital">
+      <span class="nav__brand-name">Shiraume Digital</span>
+    </a>
+    <div class="nav__links">
+      <a href="About.html" class="nav-link">About</a>
+      <a href="Services.html" class="nav-link">Services</a>
+      <a href="Works.html" class="nav-link">Works</a>
+      <a href="Pricing.html" class="nav-link">Pricing</a>
+      <a href="Contact.html" style="padding:11px 26px;background:#141412;color:#ffffff;border-radius:2px;font-size:14px;font-weight:500;">お問い合わせ</a>
+    </div>
+    <button class="nav__toggle" aria-label="メニュー" aria-expanded="false"><span></span><span></span><span></span></button>
+  </nav>
+
+  <!-- HERO -->
+  <header class="simple-hero" style="padding:110px 56px 60px;">
+    <span class="simple-hero__eyebrow">INQUIRY FORM</span>
+    <h1 class="simple-hero__title simple-hero__title--36">お問い合わせフォーム</h1>
+    <p class="simple-hero__desc" style="max-width:560px;">ご希望の分野を選択いただくと、専用のお問い合わせフォームに移動します。</p>
+  </header>
+
+  <!-- CATEGORY LIST -->
+  <section class="fade-section" style="padding:0 56px 140px;">
+    <div id="inquiry-category-list" style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:960px;margin:0 auto 36px;">
+      <button type="button" class="filter-pill" data-category="飲食店（レストラン・居酒屋・カフェ）">飲食店（レストラン・居酒屋・カフェ）</button>
+      <button type="button" class="filter-pill" data-category="美容（美容室・サロン・ネイル・エステ）">美容（美容室・サロン・ネイル・エステ）</button>
+      <button type="button" class="filter-pill" data-category="医療・クリニック">医療・クリニック</button>
+      <button type="button" class="filter-pill" data-category="不動産">不動産</button>
+      <button type="button" class="filter-pill" data-category="建設・工務店">建設・工務店</button>
+      <button type="button" class="filter-pill" data-category="小売・ECサイト">小売・ECサイト</button>
+      <button type="button" class="filter-pill" data-category="コーポレートサイト">コーポレートサイト</button>
+      <button type="button" class="filter-pill" data-category="ランディングページ（LP）">ランディングページ（LP）</button>
+      <button type="button" class="filter-pill" data-category="Webアプリ・システム開発">Webアプリ・システム開発</button>
+      <button type="button" class="filter-pill" data-category="LINE公式アカウント構築">LINE公式アカウント構築</button>
+      <button type="button" class="filter-pill" data-category="SNS運用">SNS運用</button>
+      <button type="button" class="filter-pill" data-category="AI導入支援">AI導入支援</button>
+      <button type="button" class="filter-pill" data-category="保守・運用サポート">保守・運用サポート</button>
+      <button type="button" class="filter-pill" data-category="その他">その他</button>
+    </div>
+
+    <p style="max-width:640px;margin:0 auto;font-size:12px;line-height:1.8;color:#8a8a86;text-align:center;">分野を選択すると、専用のお問い合わせフォームが新しいタブで開きます。</p>
+
+    <div id="inquiry-pending-message" style="display:none;max-width:640px;margin:32px auto 0;text-align:center;padding:40px 32px;border:1px solid #ececea;border-radius:4px;background:#f7f7f5;">
+      <p style="margin:0 0 8px;font-size:14px;color:#4a4a48;">選択いただいた分野の専用フォームは、現在準備中です。</p>
+      <p style="margin:0;font-size:13px;color:#8a8a86;">お手数ですが、<a href="Contact.html" style="color:#1e3a2b;text-decoration:underline;text-underline-offset:3px;">メール・お電話・LINE</a>からお気軽にお問い合わせください。</p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta fade-section">
+    <h2 class="cta__title">まずは、お気軽にご相談ください。</h2>
+    <p class="cta__desc" style="max-width:460px;">ヒアリングからご提案まで、丁寧に伴走いたします。</p>
+    <a href="Contact.html" class="btn-cta">その他のお問い合わせ方法</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <div class="footer__brand-row">
+          <img src="assets/images/shiraume-symbol-mark.png" alt="">
+          <span class="footer__brand-name">Shiraume Digital</span>
+        </div>
+        <p class="footer__brand-desc">新世代のデジタルパートナーとして、<br class="br-desktop">シンプルで洗練されたデザインと、<br class="br-desktop">成果につながる支援を提供します。</p>
+      </div>
+      <div class="footer__cols">
+        <div class="footer__col">
+          <span class="footer__col-title">Company</span>
+          <a href="About.html">About</a>
+          <a href="Services.html">Services</a>
+          <a href="Works.html">Works</a>
+          <a href="Pricing.html">Pricing</a>
+        </div>
+        <div class="footer__col">
+          <span class="footer__col-title">Contact</span>
+          <div class="footer__contact-row">
+            <img src="assets/images/mail-envelope.png" alt="">
+            <span style="font-size:12.5px;color:#8a8a86;">contact@shiraumedigital.com</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span class="footer__copyright">© 2026 Shiraume Digital. All rights reserved.</span>
+    </div>
+  </footer>
+
+</div>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
