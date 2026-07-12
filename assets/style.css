@@ -275,7 +275,6 @@ img {
   line-height: 1.9;
   color: #e6e6e2;
   font-weight: 300;
-  word-break: keep-all;
   overflow-wrap: break-word;
 }
 
@@ -823,7 +822,6 @@ img {
   font-size: 12.5px;
   line-height: 1.8;
   color: #8a8a86;
-  word-break: keep-all;
   overflow-wrap: break-word;
 }
 
@@ -1048,7 +1046,6 @@ img {
   line-height: 1.9;
   color: #e6e6e2;
   font-weight: 300;
-  word-break: keep-all;
   overflow-wrap: break-word;
 }
 
@@ -1086,7 +1083,6 @@ img {
   font-size: 14.5px;
   color: #767672;
   line-height: 1.9;
-  word-break: keep-all;
   overflow-wrap: break-word;
 }
 
