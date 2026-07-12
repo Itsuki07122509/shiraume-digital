@@ -250,6 +250,8 @@ img {
 
 .hero__title {
   margin: 0;
+  min-width: 0;
+  max-width: 100%;
   font-size: 85px;
   line-height: 1.4;
   font-weight: 700;
@@ -261,6 +263,7 @@ img {
 
 .hero__desc {
   margin: 0;
+  min-width: 0;
   max-width: 560px;
   font-size: 16px;
   line-height: 1.9;
@@ -354,6 +357,8 @@ img {
 
 .section-heading__title {
   margin: 0;
+  min-width: 0;
+  max-width: 100%;
   font-size: 45px;
   font-weight: 700;
   font-family: 'Shippori Mincho', serif;
@@ -361,6 +366,8 @@ img {
 
 .section-heading__desc {
   margin: 0;
+  min-width: 0;
+  max-width: 100%;
   font-size: 14px;
   color: #767672;
 }
@@ -423,23 +430,18 @@ img {
   background: #f7f7f5;
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
-  grid-template-areas:
-    "heading image"
-    "body    image";
-  column-gap: 80px;
-  row-gap: 44px;
+  gap: 80px;
   align-items: center;
 }
 
-.strengths__body {
-  grid-area: body;
+.strengths__text {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 44px;
 }
 
 .strengths__heading {
-  grid-area: heading;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -488,7 +490,7 @@ img {
 }
 
 .strengths__image {
-  grid-area: image;
+  min-width: 0;
   border-radius: 6px;
   overflow: hidden;
   box-shadow: 0 24px 60px rgba(20,20,18,0.12);
@@ -916,6 +918,23 @@ img {
 .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); }
 .grid-6 { display: grid; grid-template-columns: repeat(6, 1fr); }
 
+/* About.html: INTRO section — heading first, then photo, then the
+   description paragraphs, so on mobile it stacks in reading order
+   instead of dumping the photo after all the text. */
+.about-intro-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  grid-template-areas:
+    "heading image"
+    "body    image";
+  column-gap: 72px;
+  row-gap: 22px;
+  align-items: center;
+}
+.about-intro-grid__heading { grid-area: heading; min-width: 0; display: flex; flex-direction: column; gap: 22px; }
+.about-intro-grid__image { grid-area: image; min-width: 0; }
+.about-intro-grid__body { grid-area: body; min-width: 0; display: flex; flex-direction: column; gap: 18px; }
+
 /* ==========================================================================
    Sub-pages (About / Services / Works / Pricing / Contact)
    ========================================================================== */
@@ -978,6 +997,7 @@ img {
 
 .subhero__title {
   margin: 0;
+  min-width: 0;
   max-width: 100%;
   font-weight: 700;
   font-family: 'Shippori Mincho', serif;
@@ -990,6 +1010,7 @@ img {
 
 .subhero__desc {
   margin: 0;
+  min-width: 0;
   max-width: 600px;
   font-size: 15px;
   line-height: 1.9;
@@ -1018,6 +1039,8 @@ img {
 
 .simple-hero__title {
   margin: 0;
+  min-width: 0;
+  max-width: 100%;
   font-weight: 700;
   font-family: 'Shippori Mincho', serif;
 }
@@ -1027,6 +1050,7 @@ img {
 
 .simple-hero__desc {
   margin: 0;
+  min-width: 0;
   font-size: 14.5px;
   color: #767672;
   line-height: 1.9;
@@ -1215,6 +1239,40 @@ img {
   letter-spacing: 0.15em;
   color: #1e3a2b;
   font-weight: 600;
+}
+
+/* Services.html: each service block — photo on one side, heading +
+   body (description/tags/buttons) stacked on the other. Named grid
+   areas keep the photo pinned between the heading and the body so on
+   mobile it stacks in that same reading order instead of dumping the
+   photo before or after the whole text block. */
+.service-block-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "photo heading"
+    "photo body";
+  column-gap: 72px;
+  row-gap: 18px;
+  align-items: center;
+}
+
+.service-block-grid .service-photo-frame { grid-area: photo; min-width: 0; }
+
+.service-block__heading {
+  grid-area: heading;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.service-block__body {
+  grid-area: body;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
 /* Services / Works: numbered flow step (compact variant) */
@@ -1936,13 +1994,16 @@ img {
   .hero { height: 620px; }
   .hero__title { font-size: 60px; }
 
-  .strengths { grid-template-columns: 1fr; grid-template-areas: "heading" "image" "body"; row-gap: 32px; }
+  .strengths { gap: 40px; }
   .strengths__list { width: 100%; height: auto; }
-  .strengths__image img { width: 100%; height: auto; object-fit: contain; }
+  .strengths__image img { width: 100%; height: 100%; min-height: 320px; object-fit: cover; }
   .feature-photo { height: auto !important; object-fit: contain !important; }
 
-  .grid-2,
-  .grid-company { grid-template-columns: 1fr; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .about-vision-grid,
+  .grid-company { grid-template-columns: 1fr 1fr !important; gap: 40px !important; }
+  .about-intro-grid { grid-template-columns: 1fr; grid-template-areas: "heading" "image" "body"; row-gap: 24px; }
+  .service-block-grid { grid-template-columns: 1fr; grid-template-areas: "heading" "photo" "body"; row-gap: 18px; }
 }
 
 /* Mobile: single-column layouts, hamburger nav, smaller type */
@@ -2033,22 +2094,49 @@ img {
   /* Grids collapse to a single column */
   .services__grid,
   .grid-2,
-  .grid-company,
   .grid-3,
   .grid-4,
   .grid-6,
   .flow__grid { grid-template-columns: 1fr !important; gap: 32px !important; }
 
-  /* Services.html: tighten the gap between each service's photo and its
-     text block, and soften the photo's shadow, so the two read as one
-     unified block instead of two disconnected pieces on mobile. */
-  .service-block-grid { gap: 20px !important; }
+  /* Services.html: stack each block as heading → photo → body, with
+     a tightened gap and a softer shadow so the photo and text read as
+     one unified block instead of two disconnected pieces. */
+  .service-block-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas: "heading" "photo" "body";
+    row-gap: 16px;
+  }
   .service-photo-frame { box-shadow: 0 10px 24px rgba(20,20,18,0.08); }
 
-  .strengths { grid-template-columns: 1fr; grid-template-areas: "heading" "image" "body"; }
-  .strengths__list { width: 100%; height: auto; gap: 24px; }
-  .strengths__image img { width: 100%; height: auto; object-fit: contain; }
-  .strengths__image { box-shadow: 0 12px 28px rgba(20,20,18,0.10); }
+  /* About.html VISION section + COMPANY section: stay side-by-side
+     (text left / photo right) on phones instead of collapsing. */
+  .about-vision-grid { grid-template-columns: 1fr 1fr !important; gap: 20px !important; align-items: center !important; }
+  .about-vision-grid h2 { font-size: 20px !important; }
+  .about-vision-grid p { font-size: 12px !important; }
+
+  .grid-company { grid-template-columns: 1fr 1fr !important; gap: 16px !important; align-items: end !important; }
+  .grid-company h2 { font-size: 20px !important; }
+  .info-row { grid-template-columns: 1fr; gap: 4px; padding: 14px 0; }
+  .info-row__label { font-size: 11px; }
+  .info-row__value { font-size: 11.5px; line-height: 1.5; }
+
+  /* About.html INTRO section: heading, then photo, then description. */
+  .about-intro-grid { grid-template-columns: 1fr; grid-template-areas: "heading" "image" "body"; row-gap: 20px; }
+
+  /* Strengths: stay side-by-side (text left / photo right) even on
+     phones, per request — just tighten proportions so the text column
+     stays readable at narrow widths. */
+  .strengths { grid-template-columns: 1fr 1fr; column-gap: 16px; row-gap: 0; }
+  .strengths__list { width: 100%; height: auto; gap: 16px; }
+  .strengths__list .strength-item__title { font-size: 13px; }
+  .strengths__list .strength-item__desc { font-size: 11px; line-height: 1.6; }
+  .strengths__list .strength-item__icon { width: 22px; height: 22px; }
+  .strengths__list .strength-item { gap: 10px; }
+  .strengths__heading .section-heading__title { font-size: 20px; }
+  .strengths__image img { width: 100%; height: 100%; min-height: 200px; object-fit: cover; }
+  .strengths__image { box-shadow: 0 10px 22px rgba(20,20,18,0.10); }
+  .strengths__more .btn-more { padding: 10px 18px; font-size: 12.5px; }
 
   .flow-step--top, .flow-step--bottom { padding: 24px 0 !important; border-right: none !important; }
   .flow-step--bordered { border-right: none; }
