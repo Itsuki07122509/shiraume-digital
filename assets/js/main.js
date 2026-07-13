@@ -113,99 +113,62 @@
 })();
 
 /**
- * TOP page only: scroll-scrubbed intro screen, shown once per page load.
- * The intro (branch + wordmark + Scroll cue) and the Hero underneath it
- * are driven directly by how far the visitor has scrolled, Apple-style:
- * at scrollY 0 the intro is fully shown and the Hero is invisible; by the
- * time scrollY reaches INTRO_RANGE the intro has completely faded/lifted
- * away and the Hero is fully in place (opacity 0->1, scale 1.03->1.00).
- * A smoothstep easing curve (slow to start, fastest through the middle,
- * settling at the end) keeps the two in lockstep with scroll position
- * rather than a straight linear fade. Scrolling back up before reaching
- * the end smoothly reverses it.
+ * TOP page only: intro screen with a fixed-speed reveal, shown once per
+ * page load. Rather than scrubbing opacity/scale directly off scroll
+ * position (which made the reveal depend on how fast/far the visitor
+ * scrolled - scroll slowly and stop, and the Hero copy could be left
+ * permanently hidden), the page scroll is locked the moment it loads.
+ * The first scroll/wheel/touch/keyboard gesture the visitor makes is
+ * treated purely as a "go" signal: it starts a single, fixed-duration
+ * animation (INTRO_DURATION) that always runs to completion at the same
+ * speed, driven by elapsed time rather than by continued scrolling.
+ * Nothing the visitor does after that first nudge changes its pace.
  *
- * Once the visitor scrolls all the way through a single time, the intro
- * (and the branch/petals effect) is retired for good: the Hero is pinned
- * fully visible and the scroll listener is torn down, so scrolling back
- * to the top afterward never brings the intro, branch, or petals back.
- * Only a full page reload resets this. No-ops on any page without these
- * elements (About/Services/etc. are untouched).
+ * Because the page never actually scrolls during this animation, the
+ * Hero - which sits immediately after the header in normal document
+ * flow - is guaranteed to land exactly at its own top the moment the
+ * lock is released. There is no separate scroll-distance bookkeeping to
+ * keep in sync.
  *
- * Dispatches a "shiraume:hero-revealed" event on window the moment this
- * lock happens, which the petal effect below listens for to stop for
+ * Once the reveal finishes, the intro and the branch/petals effect are
+ * retired for good and the scroll lock is released - scrolling back to
+ * the top afterward never brings any of it back. Only a full page
+ * reload resets this. No-ops on any page without these elements
+ * (About/Services/etc. are untouched).
+ *
+ * Dispatches a "shiraume:hero-revealed" event on window the moment the
+ * reveal completes, which the petal effect below listens for to stop for
  * good.
  */
 (function () {
   var intro = document.getElementById('introScreen');
   var hero = document.getElementById('heroSection');
-  var spacer = document.getElementById('introSpacer');
   var nav = document.getElementById('siteNav');
   var branch = document.querySelector('.plum-branch');
-  if (!intro || !hero || !spacer) return;
+  if (!intro || !hero) return;
 
-  // A long, unhurried scroll before the Hero fully takes over. Must match
-  // the spacer's inline fallback height in index.html (kept as a plain
-  // no-JS fallback only).
-  var INTRO_RANGE = 600;
-  spacer.style.height = INTRO_RANGE + 'px';
+  // A slow, unhurried crossfade - always this long, regardless of how
+  // the visitor scrolls.
+  var INTRO_DURATION = 2600;
 
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var html = document.documentElement;
+  var body = document.body;
 
-  var ticking = false;
+  var started = false;
   var locked = false;
 
-  // Smoothstep: eases in and out rather than tracking scroll linearly.
+  // Smoothstep: eases in and out rather than a straight linear fade.
   function ease(p) {
     return p * p * (3 - 2 * p);
   }
 
-  // Collapses the reserved scroll distance and compensates scrollY by the
-  // exact same amount, so the visible frame doesn't jump: the Hero's own
-  // top was already sitting at the top of the viewport at this instant
-  // (that's the whole point of the spacer), and it stays exactly there
-  // after the spacer disappears. This also means scrolling back up
-  // afterward has no intro-distance left to scroll back into - the intro
-  // and petals are gone for good until the page is reloaded.
-  //
-  // hideBranch is false for the reduced-motion path: that skips the
-  // animated intro immediately, but per the original brief the static
-  // branch should keep showing for reduced-motion visitors (only the
-  // falling-petals motion is the thing being suppressed).
-  function lockRevealed(hideBranch) {
-    if (locked) return;
-    locked = true;
-
-    var removedHeight = spacer.offsetHeight;
-    var newScrollY = Math.max(0, window.scrollY - removedHeight);
-
-    spacer.style.height = '0px';
-    window.scrollTo(0, newScrollY);
-
-    hero.style.opacity = '1';
-    hero.style.transform = 'scale(1)';
-    if (nav) {
-      nav.style.opacity = '1';
-      nav.style.pointerEvents = 'auto';
-    }
-    intro.style.display = 'none';
-    if (branch && hideBranch) branch.style.display = 'none';
-
-    // Kicks off the staggered top-to-bottom / left-to-right cascade for
-    // the Hero copy and buttons (see .hero-fade / .hero-fade--text in
-    // style.css) right as the Hero finishes taking over the screen.
-    hero.classList.add('is-content-revealed');
-
-    window.removeEventListener('scroll', onScroll);
-    window.dispatchEvent(new Event('shiraume:hero-revealed'));
+  function setScrollLocked(isLocked) {
+    html.style.overflow = isLocked ? 'hidden' : '';
+    body.style.overflow = isLocked ? 'hidden' : '';
   }
 
-  function apply() {
-    ticking = false;
-    if (locked) return;
-
-    var raw = Math.max(0, Math.min(1, window.scrollY / INTRO_RANGE));
-    var progress = ease(raw);
-
+  function paint(progress) {
     intro.style.opacity = String(1 - progress);
     intro.style.transform = 'translateY(' + (-progress * 60) + 'px)';
 
@@ -216,30 +179,81 @@
 
     // The fixed header stays out of the way during the brand moment and
     // arrives together with the Hero, instead of sitting over the intro.
-    if (nav) {
-      nav.style.opacity = String(progress);
-      nav.style.pointerEvents = progress > 0.9 ? 'auto' : 'none';
-    }
+    if (nav) nav.style.opacity = String(progress);
 
     // The branch fades out together with the intro instead of vanishing
-    // abruptly the instant the scroll finishes.
+    // abruptly the instant the reveal finishes.
     if (branch) branch.style.opacity = String(1 - progress);
-
-    if (raw >= 1) lockRevealed(true);
   }
 
-  function onScroll() {
-    if (ticking) return;
-    ticking = true;
-    window.requestAnimationFrame(apply);
+  // hideBranch is false for the reduced-motion path: that skips the
+  // animated intro immediately, but per the original brief the static
+  // branch should keep showing for reduced-motion visitors (only the
+  // falling-petals motion is the thing being suppressed).
+  function finish(hideBranch) {
+    if (locked) return;
+    locked = true;
+
+    paint(1);
+    if (nav) nav.style.pointerEvents = 'auto';
+    intro.style.display = 'none';
+    if (branch && hideBranch) branch.style.display = 'none';
+    setScrollLocked(false);
+
+    // Kicks off the staggered top-to-bottom / left-to-right cascade for
+    // the Hero copy and buttons (see .hero-fade / .hero-fade--text in
+    // style.css) right as the Hero finishes taking over the screen.
+    hero.classList.add('is-content-revealed');
+
+    window.dispatchEvent(new Event('shiraume:hero-revealed'));
+  }
+
+  function runFixedSpeedReveal() {
+    var startTime = null;
+
+    function frame(now) {
+      if (startTime === null) startTime = now;
+      var raw = Math.min(1, (now - startTime) / INTRO_DURATION);
+      paint(ease(raw));
+
+      if (raw < 1) {
+        window.requestAnimationFrame(frame);
+      } else {
+        finish(true);
+      }
+    }
+
+    window.requestAnimationFrame(frame);
+  }
+
+  function beginOnce(e) {
+    if (started) return;
+    started = true;
+    if (e && e.cancelable) e.preventDefault();
+
+    window.removeEventListener('wheel', beginOnce);
+    window.removeEventListener('touchmove', beginOnce);
+    window.removeEventListener('keydown', onKeydownTrigger);
+
+    runFixedSpeedReveal();
+  }
+
+  var SCROLL_KEYS = { 32: true, 33: true, 34: true, 35: true, 36: true, 37: true, 38: true, 39: true, 40: true };
+  function onKeydownTrigger(e) {
+    if (SCROLL_KEYS[e.keyCode]) beginOnce(e);
   }
 
   if (reduceMotion) {
-    // Skip the scroll-driven intro entirely; keep the branch static.
-    lockRevealed(false);
+    // Skip the timed intro entirely; keep the branch static.
+    paint(1);
+    finish(false);
   } else {
-    apply();
-    window.addEventListener('scroll', onScroll, { passive: true });
+    if (nav) nav.style.pointerEvents = 'none';
+    paint(0);
+    setScrollLocked(true);
+    window.addEventListener('wheel', beginOnce, { passive: false });
+    window.addEventListener('touchmove', beginOnce, { passive: false });
+    window.addEventListener('keydown', onKeydownTrigger);
   }
 })();
 
