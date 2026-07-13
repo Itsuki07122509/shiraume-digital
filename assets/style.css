@@ -118,23 +118,25 @@ img {
 }
 
 .hero.is-content-revealed .hero-fade--text {
-  animation: heroTextReveal 2.2s cubic-bezier(0.16,1,0.3,1) forwards;
+  animation: heroTextReveal 1.6s cubic-bezier(0.16,1,0.3,1) forwards;
 }
 
 .hero-fade--1 { animation-delay: 0.1s; }
-.hero-fade--3 { animation-delay: 3.9s; }
+.hero-fade--3 { animation-delay: 2.8s; }
 
 /* Buttons: a plain fade with no rise, starting right as the title
    ("ともに、未来を、作ろう。") finishes its own reveal (title line 2
-   completes at 2s delay + 1.8s duration = 3.8s) rather than waiting for
-   the description underneath to finish too. */
+   completes at 1.6s delay + 1.2s duration = 2.8s) rather than waiting for
+   the description underneath to finish too. Tightened so the CTAs are
+   clickable sooner after the reveal begins. */
 .hero.is-content-revealed .hero-fade--4 {
   animation: heroFadeIn 1.4s ease-out forwards;
-  animation-delay: 4s;
+  animation-delay: 2.9s;
 }
 
-/* Title: each line unveils from the top, one after the other - much
-   slower and more deliberate than the rest of the Hero copy. */
+/* Title: each line unveils from the top, one after the other - slower
+   and more deliberate than the rest of the Hero copy, but tightened so
+   the whole cascade (and the CTA buttons after it) resolves sooner. */
 .hero-title-line {
   display: inline-block;
   opacity: 0;
@@ -142,11 +144,11 @@ img {
 }
 
 .hero.is-content-revealed .hero-title-line {
-  animation: heroTitleReveal 1.8s cubic-bezier(0.16,1,0.3,1) forwards;
+  animation: heroTitleReveal 1.2s cubic-bezier(0.16,1,0.3,1) forwards;
 }
 
-.hero-title-line--1 { animation-delay: 0.6s; }
-.hero-title-line--2 { animation-delay: 2s; }
+.hero-title-line--1 { animation-delay: 0.4s; }
+.hero-title-line--2 { animation-delay: 1.6s; }
 
 /* Buttons only appear once every line of copy above has fully settled
    (eyebrow -> both title lines -> description), then rise in together. */
