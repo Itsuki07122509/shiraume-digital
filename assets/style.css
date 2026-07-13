@@ -117,8 +117,8 @@ img {
 }
 
 .hero-fade--1 { animation-delay: 0.1s; }
-.hero-fade--3 { animation-delay: 3.6s; }
-.hero-fade--4 { animation-delay: 4.7s; }
+.hero-fade--3 { animation-delay: 3.9s; }
+.hero-fade--4 { animation-delay: 6.3s; }
 
 /* Title: each line unveils from the top, one after the other - much
    slower and more deliberate than the rest of the Hero copy. */
@@ -134,6 +134,10 @@ img {
 
 .hero-title-line--1 { animation-delay: 0.6s; }
 .hero-title-line--2 { animation-delay: 2s; }
+
+/* Buttons only appear once every line of copy above has fully settled
+   (eyebrow -> both title lines -> description), then rise in together. */
+.hero__actions { margin-top: 26px; }
 
 .works-track--row1 {
   animation: worksMarquee 32s linear infinite;
@@ -420,7 +424,7 @@ img {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
+  gap: 14px;
 }
 
 .intro-screen__mark {
@@ -436,6 +440,14 @@ img {
   font-weight: 600;
   letter-spacing: 0.06em;
   color: #141412;
+}
+
+.intro-screen__tagline {
+  margin-top: -4px;
+  font-size: 12.5px;
+  letter-spacing: 0.14em;
+  color: #9a9a95;
+  white-space: nowrap;
 }
 
 .intro-screen__scroll {
