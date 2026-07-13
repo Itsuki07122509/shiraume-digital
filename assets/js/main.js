@@ -113,51 +113,75 @@
 })();
 
 /**
- * TOP page only: scroll intro screen.
- * Shows a centered "Shiraume Digital" wordmark + Scroll cue over the Hero
- * on first paint; fades out once the visitor scrolls down ~50-80px, then
- * the Hero fades/scales in underneath it. No-ops on any page without these
- * elements (About/Services/etc. are untouched).
+ * TOP page only: scroll-scrubbed intro screen.
+ * The intro (wordmark + Scroll cue) and the Hero underneath it are both
+ * driven directly by how far the visitor has scrolled, Apple-style: at
+ * scrollY 0 the intro is fully shown and the Hero is invisible; by the
+ * time scrollY reaches INTRO_RANGE the intro has completely faded/lifted
+ * away and the Hero is fully in place (opacity 0->1, scale 1.03->1.00).
+ * Scrolling back up smoothly reverses the same transition. No-ops on any
+ * page without these elements (About/Services/etc. are untouched).
+ *
+ * Dispatches a "shiraume:hero-revealed" event on window the first time
+ * progress reaches 1, which the petal effect below listens for to stop
+ * permanently once the Hero is fully shown.
  */
 (function () {
   var intro = document.getElementById('introScreen');
   var hero = document.getElementById('heroSection');
   if (!intro || !hero) return;
 
-  var revealed = false;
-  var threshold = 64; // within the requested 50-80px range
+  // ~2.5x the previous 64px threshold, so the transition reads as a
+  // gradual scroll-linked reveal rather than an instant swap.
+  var INTRO_RANGE = 200;
 
-  function reveal() {
-    if (revealed) return;
-    revealed = true;
-    intro.classList.add('intro-screen--hidden');
-    hero.classList.add('is-revealed');
-    window.removeEventListener('scroll', onTrigger);
-    window.removeEventListener('wheel', onTrigger);
-    window.removeEventListener('touchmove', onTrigger);
-    window.setTimeout(function () {
-      intro.style.display = 'none';
-    }, 850);
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var ticking = false;
+  var everFullyRevealed = false;
+
+  function apply() {
+    ticking = false;
+    var progress = Math.max(0, Math.min(1, window.scrollY / INTRO_RANGE));
+
+    if (reduceMotion) progress = 1;
+
+    // Intro: fade out and lift slightly as progress increases.
+    intro.style.opacity = String(1 - progress);
+    intro.style.transform = 'translateY(' + (-progress * 40) + 'px)';
+
+    // Hero: fades and scales in underneath, in lockstep with the intro.
+    hero.style.opacity = String(progress);
+    hero.style.transform = 'scale(' + (1.03 - progress * 0.03) + ')';
+
+    if (progress >= 1 && !everFullyRevealed) {
+      everFullyRevealed = true;
+      window.dispatchEvent(new Event('shiraume:hero-revealed'));
+    }
   }
 
-  function onTrigger() {
-    if (window.scrollY >= threshold) reveal();
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(apply);
   }
 
-  window.addEventListener('scroll', onTrigger, { passive: true });
-  window.addEventListener('wheel', onTrigger, { passive: true });
-  window.addEventListener('touchmove', onTrigger, { passive: true });
+  apply();
+  window.addEventListener('scroll', onScroll, { passive: true });
 })();
 
 /**
- * TOP page only: falling plum-blossom petals.
+ * TOP page only: falling plum-blossom petals, intro-only.
  * Each of the 10 source petals (numbered (1)-(10) in the reference sheet)
  * has been individually cut out - background removed, no number labels -
  * into its own transparent PNG at assets/images/petals/petal-01.png
- * through petal-10.png. One is picked at random per falling petal. Purely
- * decorative (aria-hidden, pointer-events: none) and stays off entirely
- * when the visitor has requested reduced motion - only the static branch
- * remains in that case.
+ * through petal-10.png. One is picked at random per falling petal, and
+ * they drift near the top-left branch with a gentle side-to-side sway.
+ * Petals only spawn while the intro is still showing; once the Hero has
+ * fully scrolled into view ("shiraume:hero-revealed") spawning stops for
+ * good and any still-falling petals fade out. Purely decorative
+ * (aria-hidden, pointer-events: none) and never starts at all when the
+ * visitor has requested reduced motion - only the static branch remains.
  */
 (function () {
   var layer = document.getElementById('petalLayer');
@@ -170,6 +194,8 @@
   var MAX_PETALS = 8;
   var PETAL_COUNT = 10;
   var active = 0;
+  var stopped = false;
+  var spawnTimer = null;
 
   function rand(min, max) { return Math.random() * (max - min) + min; }
 
@@ -179,7 +205,7 @@
   }
 
   function spawnPetal() {
-    if (active >= MAX_PETALS) return;
+    if (stopped || active >= MAX_PETALS) return;
     active++;
 
     var petal = document.createElement('div');
@@ -187,9 +213,9 @@
 
     var size = rand(12, 24);
     var which = 1 + Math.floor(rand(0, PETAL_COUNT));
-    var duration = rand(9, 16);
-    var drift = rand(-70, 90);
-    var spin = rand(0, 360) * (Math.random() < 0.5 ? 1 : -1);
+    // "かなりゆっくり" - a slow, unhurried fall.
+    var duration = rand(16, 26);
+    var spin = rand(0, 200) * (Math.random() < 0.5 ? 1 : -1);
     var opacity = rand(0.6, 1);
     var startLeft = rand(0, 260);
 
@@ -198,7 +224,11 @@
     petal.style.left = startLeft + 'px';
     petal.style.opacity = opacity;
     petal.style.backgroundImage = petalUrl(which);
-    petal.style.setProperty('--petal-drift', drift + 'px');
+    // Gentle wind sway: alternating left/right drift at each keyframe stop.
+    petal.style.setProperty('--petal-dx1', rand(10, 26) + 'px');
+    petal.style.setProperty('--petal-dx2', -rand(10, 26) + 'px');
+    petal.style.setProperty('--petal-dx3', rand(8, 22) + 'px');
+    petal.style.setProperty('--petal-dx4', -rand(4, 14) + 'px');
     petal.style.setProperty('--petal-spin', spin + 'deg');
     petal.style.animationDuration = duration + 's';
 
@@ -210,13 +240,30 @@
     layer.appendChild(petal);
   }
 
-  // Seed an initial batch so the effect is already present on load.
-  for (var i = 0; i < MIN_PETALS; i++) {
-    window.setTimeout(spawnPetal, i * 500);
+  function stopPetals() {
+    stopped = true;
+    if (spawnTimer) {
+      window.clearInterval(spawnTimer);
+      spawnTimer = null;
+    }
+    // Let any already-falling petals fade out naturally rather than
+    // yanking them away mid-fall.
+    var falling = layer.querySelectorAll('.petal');
+    falling.forEach(function (p) {
+      p.style.transition = 'opacity 1.2s ease';
+      p.style.opacity = '0';
+    });
   }
 
-  window.setInterval(function () {
+  // Seed an initial batch so the effect is already present on load.
+  for (var i = 0; i < MIN_PETALS; i++) {
+    window.setTimeout(spawnPetal, i * 400);
+  }
+
+  spawnTimer = window.setInterval(function () {
     var target = MIN_PETALS + Math.floor(Math.random() * (MAX_PETALS - MIN_PETALS + 1));
     if (active < target) spawnPetal();
-  }, 1400);
+  }, 1200);
+
+  window.addEventListener('shiraume:hero-revealed', stopPetals);
 })();
