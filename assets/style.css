@@ -433,9 +433,9 @@ img {
 .petal {
   position: absolute;
   top: -24px;
-  background-image: url('images/plum-petals.png');
   background-repeat: no-repeat;
-  background-size: 500% 200%;
+  background-size: contain;
+  background-position: center;
   will-change: transform, opacity;
   animation-name: petalFall;
   animation-timing-function: linear;

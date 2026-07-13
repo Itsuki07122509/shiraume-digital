@@ -151,11 +151,13 @@
 
 /**
  * TOP page only: falling plum-blossom petals.
- * Reads 10 petal sprites (5 columns x 2 rows) from
- * assets/images/plum-petals.png via the .petal background-image declared
- * in style.css, and picks one at random per petal. Purely decorative
- * (aria-hidden, pointer-events: none) and stays off entirely when the
- * visitor has requested reduced motion - only the static branch remains.
+ * Each of the 10 source petals (numbered (1)-(10) in the reference sheet)
+ * has been individually cut out - background removed, no number labels -
+ * into its own transparent PNG at assets/images/petals/petal-01.png
+ * through petal-10.png. One is picked at random per falling petal. Purely
+ * decorative (aria-hidden, pointer-events: none) and stays off entirely
+ * when the visitor has requested reduced motion - only the static branch
+ * remains in that case.
  */
 (function () {
   var layer = document.getElementById('petalLayer');
@@ -166,11 +168,15 @@
 
   var MIN_PETALS = 5;
   var MAX_PETALS = 8;
-  var SPRITE_COLS = 5;
-  var SPRITE_ROWS = 2;
+  var PETAL_COUNT = 10;
   var active = 0;
 
   function rand(min, max) { return Math.random() * (max - min) + min; }
+
+  function petalUrl(n) {
+    var num = n < 10 ? '0' + n : '' + n;
+    return 'url(assets/images/petals/petal-' + num + '.png)';
+  }
 
   function spawnPetal() {
     if (active >= MAX_PETALS) return;
@@ -180,8 +186,7 @@
     petal.className = 'petal';
 
     var size = rand(12, 24);
-    var col = Math.floor(rand(0, SPRITE_COLS));
-    var row = Math.floor(rand(0, SPRITE_ROWS));
+    var which = 1 + Math.floor(rand(0, PETAL_COUNT));
     var duration = rand(9, 16);
     var drift = rand(-70, 90);
     var spin = rand(0, 360) * (Math.random() < 0.5 ? 1 : -1);
@@ -192,7 +197,7 @@
     petal.style.height = size + 'px';
     petal.style.left = startLeft + 'px';
     petal.style.opacity = opacity;
-    petal.style.backgroundPosition = (col / (SPRITE_COLS - 1) * 100) + '% ' + (row / (SPRITE_ROWS - 1) * 100) + '%';
+    petal.style.backgroundImage = petalUrl(which);
     petal.style.setProperty('--petal-drift', drift + 'px');
     petal.style.setProperty('--petal-spin', spin + 'deg');
     petal.style.animationDuration = duration + 's';
