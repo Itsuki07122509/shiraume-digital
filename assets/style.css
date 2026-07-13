@@ -124,11 +124,13 @@ img {
 .hero-fade--1 { animation-delay: 0.1s; }
 .hero-fade--3 { animation-delay: 3.9s; }
 
-/* Buttons: held back further still, and a plain fade with no rise -
-   a quiet, deliberate arrival once every line of copy has settled. */
+/* Buttons: a plain fade with no rise, starting right as the title
+   ("ともに、未来を、作ろう。") finishes its own reveal (title line 2
+   completes at 2s delay + 1.8s duration = 3.8s) rather than waiting for
+   the description underneath to finish too. */
 .hero.is-content-revealed .hero-fade--4 {
   animation: heroFadeIn 1.4s ease-out forwards;
-  animation-delay: 6.9s;
+  animation-delay: 4s;
 }
 
 /* Title: each line unveils from the top, one after the other - much
