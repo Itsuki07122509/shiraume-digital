@@ -171,10 +171,6 @@
     hero.style.opacity = String(progress);
     hero.style.transform = 'scale(' + (1.03 - progress * 0.03) + ')';
 
-    // The fixed header stays out of the way during the brand moment and
-    // arrives together with the Hero, instead of sitting over the intro.
-    if (nav) nav.style.opacity = String(progress);
-
     // The branch fades out together with the intro instead of vanishing
     // abruptly the instant the reveal finishes.
     if (branch) branch.style.opacity = String(1 - progress);
@@ -243,7 +239,6 @@
     paint(1);
     finish(false);
   } else {
-    if (nav) nav.style.pointerEvents = 'none';
     paint(0);
     pinning = true;
     // The first "scroll" event - from wheel, trackpad, touch, keyboard,
@@ -278,8 +273,8 @@
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduceMotion) return;
 
-  var MIN_PETALS = 5;
-  var MAX_PETALS = 8;
+  var MIN_PETALS = 10;
+  var MAX_PETALS = 16;
   var PETAL_COUNT = 10;
   var active = 0;
   var stopped = false;
@@ -345,13 +340,13 @@
 
   // Seed an initial batch so the effect is already present on load.
   for (var i = 0; i < MIN_PETALS; i++) {
-    window.setTimeout(spawnPetal, i * 400);
+    window.setTimeout(spawnPetal, i * 220);
   }
 
   spawnTimer = window.setInterval(function () {
     var target = MIN_PETALS + Math.floor(Math.random() * (MAX_PETALS - MIN_PETALS + 1));
     if (active < target) spawnPetal();
-  }, 1200);
+  }, 900);
 
   window.addEventListener('shiraume:hero-revealed', stopPetals);
 })();
