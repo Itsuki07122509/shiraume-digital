@@ -143,10 +143,10 @@
   var branch = document.querySelector('.plum-branch');
   if (!intro || !hero || !spacer) return;
 
-  // ~4.5x the original 64px threshold - a long, unhurried scroll before
-  // the Hero fully takes over. Must match the spacer's inline fallback
-  // height in index.html (kept as a plain no-JS fallback only).
-  var INTRO_RANGE = 420;
+  // A long, unhurried scroll before the Hero fully takes over. Must match
+  // the spacer's inline fallback height in index.html (kept as a plain
+  // no-JS fallback only).
+  var INTRO_RANGE = 600;
   spacer.style.height = INTRO_RANGE + 'px';
 
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -190,6 +190,11 @@
     intro.style.display = 'none';
     if (branch && hideBranch) branch.style.display = 'none';
 
+    // Kicks off the staggered top-to-bottom / left-to-right cascade for
+    // the Hero copy and buttons (see .hero-fade / .hero-fade--text in
+    // style.css) right as the Hero finishes taking over the screen.
+    hero.classList.add('is-content-revealed');
+
     window.removeEventListener('scroll', onScroll);
     window.dispatchEvent(new Event('shiraume:hero-revealed'));
   }
@@ -215,6 +220,10 @@
       nav.style.opacity = String(progress);
       nav.style.pointerEvents = progress > 0.9 ? 'auto' : 'none';
     }
+
+    // The branch fades out together with the intro instead of vanishing
+    // abruptly the instant the scroll finishes.
+    if (branch) branch.style.opacity = String(1 - progress);
 
     if (raw >= 1) lockRevealed(true);
   }

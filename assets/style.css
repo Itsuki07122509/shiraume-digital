@@ -51,6 +51,11 @@ img {
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes heroTextReveal {
+  from { opacity: 0; transform: translateY(20px); clip-path: inset(0 100% 0 0); }
+  to   { opacity: 1; transform: translateY(0); clip-path: inset(0 0% 0 0); }
+}
+
 @keyframes worksMarquee {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
@@ -79,15 +84,35 @@ img {
   100% { transform: translate3d(var(--petal-dx4, 0px), 106vh, 0) rotate(var(--petal-spin, 220deg)); }
 }
 
+/* Hero copy/buttons stay hidden (opacity 0) until .hero carries
+   is-content-revealed - added by main.js at the exact moment the Hero
+   finishes scrolling into place - at which point each piece cascades in
+   top-to-bottom (staggered by the --N delay classes below). Plain
+   .hero-fade elements (the button row) fade + rise; .hero-fade--text
+   elements (eyebrow/title/description) additionally wipe in from left
+   to right via clip-path, matching the "文字は左から右に" reveal. */
+
 .hero-fade {
   opacity: 0;
+  transform: translateY(24px);
+}
+
+.hero-fade--text {
+  clip-path: inset(0 100% 0 0);
+}
+
+.hero.is-content-revealed .hero-fade {
   animation: fadeInUp 1s cubic-bezier(0.16,1,0.3,1) forwards;
 }
 
-.hero-fade--1 { animation-delay: 0.1s; }
-.hero-fade--2 { animation-delay: 0.25s; }
+.hero.is-content-revealed .hero-fade--text {
+  animation: heroTextReveal 1.05s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+
+.hero-fade--1 { animation-delay: 0.05s; }
+.hero-fade--2 { animation-delay: 0.22s; }
 .hero-fade--3 { animation-delay: 0.5s; }
-.hero-fade--4 { animation-delay: 0.7s; }
+.hero-fade--4 { animation-delay: 0.72s; }
 
 .works-track--row1 {
   animation: worksMarquee 32s linear infinite;
@@ -421,10 +446,10 @@ img {
 .plum-branch {
   position: fixed;
   top: 84px;
-  left: -60px;
-  height: 45vh;
+  left: -80px;
+  height: 62vh;
   width: auto;
-  max-width: 460px;
+  max-width: 660px;
   z-index: 12;
   pointer-events: none;
   user-select: none;
@@ -453,6 +478,13 @@ img {
 @media (prefers-reduced-motion: reduce) {
   .intro-screen__scroll { animation: none !important; }
   .petal-layer { display: none; }
+  .hero-fade,
+  .hero-fade--text {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
 }
 
 /* ---------- Section heading ---------- */
