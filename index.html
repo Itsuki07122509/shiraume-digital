@@ -42,42 +42,33 @@
     <button class="nav__toggle" aria-label="メニュー" aria-expanded="false"><span></span><span></span><span></span></button>
   </nav>
 
-  <!-- SCROLL INTRO (first-view only; fades out once the visitor scrolls) -->
-  <div class="intro-screen" id="introScreen">
-    <div class="intro-screen__content">
-      <img class="intro-screen__mark" src="assets/images/shiraume-symbol-mark.png" alt="Shiraume Digital">
-      <span class="intro-screen__logo">Shiraume Digital</span>
-      <span class="intro-screen__tagline">あなたのビジネスをサポートする</span>
-      <div class="intro-screen__scroll">
-        <span>Scroll</span>
-        <span class="intro-screen__arrow">↓</span>
-      </div>
-    </div>
-  </div>
-
   <!-- PLUM BLOSSOM BRAND ACCENT (decorative branch + falling petals) -->
   <img class="plum-branch" src="assets/images/plum-branch.png" alt="" aria-hidden="true">
   <div class="petal-layer" id="petalLayer" aria-hidden="true"></div>
 
-  <noscript><style>.intro-screen{display:none!important;}.hero{opacity:1!important;transform:none!important;}</style></noscript>
+  <noscript><style>.hero{position:relative!important;}[data-reveal]{opacity:1!important;transform:none!important;clip-path:none!important;}.hero__bg{filter:brightness(0.62)!important;transform:none!important;}</style></noscript>
 
-  <!-- HERO -->
-  <header class="hero" id="heroSection">
-    <img class="hero__bg" src="assets/images/42337b81732b9a5ac161deac968f36dcd88c0a685dd68c5df317637dfecfe237-0f24652b.png" alt="">
-    <div class="hero__overlay"></div>
-    <div class="hero__content">
-      <span class="hero-fade hero-fade--text hero-fade--1 hero__eyebrow">SHIRAUME DIGITAL</span>
-      <h1 class="hero__title"><span class="hero-title-line hero-title-line--1">ともに、</span><br><span class="hero-title-line hero-title-line--2">未来を、作ろう。</span></h1>
-      <p class="hero-fade hero-fade--text hero-fade--3 hero__desc">シンプルで洗練されたデザインと、成果につながる<br class="br-desktop">Web制作・デジタル支援を。新世代のデジタルパートナー。</p>
-      <div class="hero-fade hero-fade--4 hero__actions">
-        <a href="Contact.html" class="btn-light">お問い合わせ</a>
-        <a href="Services.html" class="btn-outline-light">サービスを見る</a>
+  <!-- HERO (pinned/scrubbed: scrolling through #heroScrub's extra height
+       drives the photo + copy reveal directly, see main.js) -->
+  <div class="hero-scrub" id="heroScrub">
+    <header class="hero" id="heroSection">
+      <img class="hero__bg" src="assets/images/42337b81732b9a5ac161deac968f36dcd88c0a685dd68c5df317637dfecfe237-0f24652b.png" alt="">
+      <div class="hero__overlay"></div>
+      <div class="hero__ghost" aria-hidden="true">白梅</div>
+      <div class="hero__content">
+        <span class="hero__eyebrow" data-reveal="0.05,0.35" data-reveal-mode="wipe">SHIRAUME DIGITAL</span>
+        <h1 class="hero__title"><span class="hero-title-line hero-title-line--1" data-reveal="0.15,0.5" data-reveal-mode="wipe-down">ともに、</span><br><span class="hero-title-line hero-title-line--2" data-reveal="0.3,0.65" data-reveal-mode="wipe-down">未来を、作ろう。</span></h1>
+        <p class="hero__desc" data-reveal="0.45,0.75" data-reveal-mode="wipe">シンプルで洗練されたデザインと、成果につながる<br class="br-desktop">Web制作・デジタル支援を。新世代のデジタルパートナー。</p>
+        <div class="hero__actions" data-reveal="0.55,0.85" data-reveal-mode="fade">
+          <a href="Contact.html" class="btn-pill btn-pill--solid">お問い合わせ<span class="btn-pill__arrow">→</span></a>
+          <a href="Services.html" class="btn-pill btn-pill--ghost">サービスを見る<span class="btn-pill__arrow">→</span></a>
+        </div>
       </div>
-    </div>
-    <div class="hero__scroll">
-      <img src="assets/images/chevron-thin.png" alt="">
-    </div>
-  </header>
+      <div class="hero__scroll">
+        <img src="assets/images/chevron-thin.png" alt="">
+      </div>
+    </header>
+  </div>
 
   <!-- SERVICES -->
   <section class="services fade-section" id="services">
@@ -347,11 +338,15 @@
   </section>
 
   <!-- CTA -->
-  <section class="cta fade-section" id="contact">
-    <img class="cta__icon" src="assets/images/mail-envelope.png" alt="">
-    <h2 class="cta__title">まずは、お気軽にご相談ください。</h2>
-    <p class="cta__desc">ヒアリングからご提案まで、丁寧に伴走いたします。</p>
-    <a href="Contact.html" class="btn-cta">お問い合わせ</a>
+  <section class="cta-home fade-section" id="contact">
+    <img class="cta-home__bg" src="assets/images/contact-cta-family.jpg" alt="">
+    <div class="cta-home__overlay"></div>
+    <div class="cta-home__content">
+      <span class="cta-home__eyebrow">CONTACT</span>
+      <h2 class="cta-home__title">まずは、お気軽にご相談ください。</h2>
+      <p class="cta-home__desc">ヒアリングからご提案まで、丁寧に伴走いたします。</p>
+      <a href="Contact.html" class="btn-pill btn-pill--solid btn-pill--lg">お問い合わせ<span class="btn-pill__arrow">→</span></a>
+    </div>
   </section>
 
   <!-- FOOTER -->
