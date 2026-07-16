@@ -354,13 +354,15 @@ img {
    reveal (see main.js) while .hero itself stays stuck to the viewport top. */
 .hero-scrub {
   position: relative;
-  height: calc(760px + 60vh);
+  height: calc(100vh + 140vh);
+  height: calc(100dvh + 140vh);
 }
 
 .hero {
   position: sticky;
   top: 0;
-  height: 760px;
+  height: 100vh;
+  height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -403,6 +405,8 @@ img {
 }
 
 .stage-intro__content {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -441,11 +445,15 @@ img {
 }
 
 .stage-intro__scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%);
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  margin-top: 10px;
   font-size: 11px;
   letter-spacing: 0.22em;
   color: #8a8a86;
@@ -558,26 +566,28 @@ img {
 }
 
 /* ---------- Plum blossom brand accent (branch + falling petals) ---------- */
-/* Fixed above the Hero; fades out as the visitor scrolls through the pinned
-   reveal (see main.js), same brand-accent role the intro screen used to
-   play before the reveal was rebuilt as a scroll-scrub. */
+/* Painted INSIDE .stage-intro, before .stage-intro__content in the markup,
+   so they sit behind the Stage 1 copy (never covering the letters) while
+   still showing on top of the #FAFAFA backdrop. Being nested inside
+   #stageIntro, they fade out automatically together with it (see main.js) -
+   no separate opacity logic needed. */
 
 .plum-branch {
-  position: fixed;
+  position: absolute;
   top: 84px;
   left: -80px;
   height: 62vh;
   width: auto;
   max-width: 660px;
-  z-index: 12;
+  z-index: 0;
   pointer-events: none;
   user-select: none;
 }
 
 .petal-layer {
-  position: fixed;
+  position: absolute;
   inset: 0;
-  z-index: 12;
+  z-index: 0;
   pointer-events: none;
   overflow: hidden;
 }
@@ -747,16 +757,60 @@ img {
   display: flex;
   gap: 20px;
   align-items: flex-start;
-  transition: transform 0.35s ease;
+  opacity: 0;
+  transform: translateX(-32px);
+  transition: opacity 0.75s cubic-bezier(0.16,1,0.3,1), transform 0.75s cubic-bezier(0.16,1,0.3,1);
+}
+
+/* Alternating slide direction per item - left, right, left, right - so the
+   list feels hand-choreographed rather than a single uniform fade. Reveal
+   fires once, staggered, when .strengths (a .fade-section) scrolls into
+   view and gets .is-visible (see main.js IntersectionObserver). */
+.strength-item:nth-child(even) {
+  transform: translateX(32px);
+}
+
+.strength-item:nth-child(1) { transition-delay: 0.05s; }
+.strength-item:nth-child(2) { transition-delay: 0.2s; }
+.strength-item:nth-child(3) { transition-delay: 0.35s; }
+.strength-item:nth-child(4) { transition-delay: 0.5s; }
+
+.strengths.is-visible .strength-item {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .strength-item:hover {
   transform: translateX(6px);
 }
 
+.strengths.is-visible .strength-item:hover {
+  transition: transform 0.35s ease;
+}
+
+.strength-item__icon-wrap {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(77,102,82,0.09), rgba(77,102,82,0.16));
+  border: 1px solid rgba(77,102,82,0.2);
+  box-shadow: 0 10px 22px rgba(20,20,18,0.06), inset 0 1px 0 rgba(255,255,255,0.5);
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease, background 0.4s ease;
+}
+
+.strength-item:hover .strength-item__icon-wrap {
+  transform: scale(1.08);
+  background: linear-gradient(135deg, rgba(77,102,82,0.15), rgba(77,102,82,0.26));
+  box-shadow: 0 14px 28px rgba(77,102,82,0.18), inset 0 1px 0 rgba(255,255,255,0.5);
+}
+
 .strength-item__icon {
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   object-fit: contain;
   flex-shrink: 0;
 }
@@ -2445,8 +2499,8 @@ img {
   .grid-4 { grid-template-columns: repeat(2, 1fr); }
   .grid-6 { grid-template-columns: repeat(3, 1fr); }
 
-  .hero-scrub { height: calc(620px + 55vh); }
-  .hero { height: 620px; }
+  .hero-scrub { height: calc(100vh + 120vh); height: calc(100dvh + 120vh); }
+  .hero { height: 100vh; height: 100dvh; }
   .hero__title { font-size: 60px; }
   .stage-intro__title { font-size: 42px; }
 
@@ -2512,8 +2566,8 @@ img {
   .nav-link::after { display: none; }
 
   /* Hero */
-  .hero-scrub { height: calc(580px + 45vh); }
-  .hero { height: 580px; }
+  .hero-scrub { height: calc(100vh + 100vh); height: calc(100dvh + 100vh); }
+  .hero { height: 100vh; height: 100dvh; }
   .hero__content { padding-left: 20px !important; padding-right: 20px !important; gap: 22px; }
   .hero__eyebrow { font-size: 12px; }
   .hero__title { font-size: 46px; line-height: 1.35; }
@@ -2639,8 +2693,8 @@ img {
 }
 
 @media (max-width: 480px) {
-  .hero-scrub { height: calc(540px + 40vh); }
-  .hero { height: 540px; }
+  .hero-scrub { height: calc(100vh + 90vh); height: calc(100dvh + 90vh); }
+  .hero { height: 100vh; height: 100dvh; }
   .hero__title { font-size: 40px; }
   .subhero__title--46, .subhero__title--42 { font-size: 20px; }
   .simple-hero__title--38, .simple-hero__title--36 { font-size: 26px; }

@@ -127,13 +127,19 @@
  *
  * Two stages live stacked inside the same pinned .hero: Stage 1
  * (#stageIntro - the minimal English "Designing Growth, Building Trust."
- * first view) fades out over the first ~32% of progress, handing off to
- * Stage 2 (the existing Japanese photo hero), whose own elements carry
- * data-reveal="start,end" (a sub-range of the 0-1 progress) and
- * data-reveal-mode ("wipe" / "wipe-down" / "fade"), painted directly from
- * scroll position - no CSS keyframe animations or timers involved. The
- * background photo enters from the left and brightens as Stage 2 takes
- * over.
+ * first view, with the plum branch + petals painted behind its text)
+ * holds fully visible through the first ~12% of progress, then fades out
+ * by ~30%, handing off to Stage 2 (the existing Japanese photo hero),
+ * whose own elements carry data-reveal="start,end" (a sub-range of the
+ * 0-1 progress) and data-reveal-mode ("wipe" / "wipe-down" / "fade"),
+ * painted directly from scroll position - no CSS keyframe animations or
+ * timers involved. Stage 2 finishes revealing around 82% and then holds
+ * fully visible for the remaining scroll range, so it reads as a real,
+ * deliberate second screen rather than a flash, before handing off to the
+ * Services section. The background photo enters from the left and
+ * brightens as Stage 2 takes over. The branch/petals have no opacity
+ * logic of their own - being nested inside #stageIntro, they fade
+ * automatically together with it.
  *
  * Dispatches "shiraume:hero-revealed" once progress first reaches ~1,
  * which the petal effect below listens for to stop spawning for good
@@ -143,7 +149,6 @@
 (function () {
   var scrub = document.getElementById('heroScrub');
   var hero = document.getElementById('heroSection');
-  var branch = document.querySelector('.plum-branch');
   var bg = hero ? hero.querySelector('.hero__bg') : null;
   var stageIntro = document.getElementById('stageIntro');
   if (!scrub || !hero) return;
@@ -175,17 +180,15 @@
       bg.style.filter = 'brightness(' + (0.34 + e * 0.28) + ')';
     }
 
-    // Stage 1 (minimal English intro) fades out early, handing off to
+    // Stage 1 (minimal English intro, incl. the branch/petals painted
+    // behind its copy) holds fully visible, then fades out, handing off to
     // Stage 2 (the Japanese photo hero) underneath. Once mostly gone it
     // stops intercepting clicks so Stage 2's own button is reachable.
     if (stageIntro) {
-      var s1 = 1 - seg(e, 0, 0.32);
+      var s1 = 1 - seg(e, 0.12, 0.3);
       stageIntro.style.opacity = String(s1);
       stageIntro.style.pointerEvents = s1 > 0.15 ? 'auto' : 'none';
     }
-
-    // Branch fades out as the Hero settles in, same as before.
-    if (branch) branch.style.opacity = String(1 - seg(e, 0.15, 0.55));
 
     fadeEls.forEach(function (el) {
       var range = (el.getAttribute('data-reveal') || '0,1').split(',').map(Number);
@@ -216,10 +219,8 @@
   }
 
   if (reduceMotion) {
-    // Skip the scrub entirely; show the settled state immediately, but
-    // keep the branch static per the original brief.
+    // Skip the scrub entirely; show the settled Stage 2 state immediately.
     paint(1);
-    if (branch) branch.style.opacity = '1';
     window.dispatchEvent(new Event('shiraume:hero-revealed'));
   } else {
     window.addEventListener('scroll', function () {
