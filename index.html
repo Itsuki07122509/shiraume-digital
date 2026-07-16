@@ -16,7 +16,7 @@
 <meta name="twitter:image" content="https://shiraumedigital.com/assets/images/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&family=Shippori+Mincho:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&family=Shippori+Mincho:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon-180.png">
@@ -26,12 +26,20 @@
 
 <div class="page">
 
-  <!-- NAV -->
-  <nav class="nav" id="siteNav">
+  <!-- NAV (minimal: brand left, JP|EN + hamburger right; full links live in
+       the hamburger dropdown, reusing the same toggle used on other pages) -->
+  <nav class="nav nav--minimal" id="siteNav">
     <a href="index.html" class="nav__brand">
       <img class="nav__logo" src="assets/images/shiraume-symbol-mark.png" alt="Shiraume Digital">
-      <span class="nav__brand-name">Shiraume Digital</span>
+      <span class="nav__brand-text">
+        <span class="nav__brand-name">Shiraume</span>
+        <span class="nav__brand-sub">DIGITAL</span>
+      </span>
     </a>
+    <div class="nav__right">
+      <span class="nav__lang">JP<span class="nav__lang-sep">|</span>EN</span>
+      <button class="nav__toggle" aria-label="メニュー" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
     <div class="nav__links">
       <a href="About.html" class="nav-link">About</a>
       <a href="Services.html" class="nav-link">Services</a>
@@ -39,33 +47,47 @@
       <a href="Pricing.html" class="nav-link">Pricing</a>
       <a href="Contact.html" class="btn-nav-cta">お問い合わせ</a>
     </div>
-    <button class="nav__toggle" aria-label="メニュー" aria-expanded="false"><span></span><span></span><span></span></button>
   </nav>
 
   <!-- PLUM BLOSSOM BRAND ACCENT (decorative branch + falling petals) -->
   <img class="plum-branch" src="assets/images/plum-branch.png" alt="" aria-hidden="true">
   <div class="petal-layer" id="petalLayer" aria-hidden="true"></div>
 
-  <noscript><style>.hero{position:relative!important;}[data-reveal]{opacity:1!important;transform:none!important;clip-path:none!important;}.hero__bg{filter:brightness(0.62)!important;transform:none!important;}</style></noscript>
+  <noscript><style>.hero{position:relative!important;}.stage-intro{display:none!important;}[data-reveal]{opacity:1!important;transform:none!important;clip-path:none!important;}.hero__bg{filter:brightness(0.62)!important;transform:none!important;}.nav__links{display:flex!important;position:static!important;box-shadow:none!important;padding:0!important;}</style></noscript>
 
   <!-- HERO (pinned/scrubbed: scrolling through #heroScrub's extra height
-       drives the photo + copy reveal directly, see main.js) -->
+       fades Stage 1 (English minimal intro) out and Stage 2 (the existing
+       Japanese photo hero) in - see main.js) -->
   <div class="hero-scrub" id="heroScrub">
     <header class="hero" id="heroSection">
       <img class="hero__bg" src="assets/images/42337b81732b9a5ac161deac968f36dcd88c0a685dd68c5df317637dfecfe237-0f24652b.png" alt="">
       <div class="hero__overlay"></div>
-      <div class="hero__ghost" aria-hidden="true">白梅</div>
-      <div class="hero__content">
-        <span class="hero__eyebrow" data-reveal="0.05,0.35" data-reveal-mode="wipe">SHIRAUME DIGITAL</span>
-        <h1 class="hero__title"><span class="hero-title-line hero-title-line--1" data-reveal="0.15,0.5" data-reveal-mode="wipe-down">ともに、</span><br><span class="hero-title-line hero-title-line--2" data-reveal="0.3,0.65" data-reveal-mode="wipe-down">未来を、作ろう。</span></h1>
-        <p class="hero__desc" data-reveal="0.45,0.75" data-reveal-mode="wipe">シンプルで洗練されたデザインと、成果につながる<br class="br-desktop">Web制作・デジタル支援を。新世代のデジタルパートナー。</p>
-        <div class="hero__actions" data-reveal="0.55,0.85" data-reveal-mode="fade">
-          <a href="Contact.html" class="btn-pill btn-pill--solid">お問い合わせ<span class="btn-pill__arrow">→</span></a>
-          <a href="Services.html" class="btn-pill btn-pill--ghost">サービスを見る<span class="btn-pill__arrow">→</span></a>
+
+      <!-- STAGE 1: minimal English first view, fades out early in the scrub -->
+      <div class="stage-intro" id="stageIntro">
+        <div class="stage-intro__content">
+          <h1 class="stage-intro__title">
+            <span class="c-ink">Designing </span><span class="c-brand">Growth,</span><br>
+            <span class="c-ink">Building </span><span class="c-brand">Trust.</span>
+          </h1>
+          <p class="stage-intro__subtitle">Web Design &amp; Development</p>
+          <p class="stage-intro__services">ホームページ制作　｜　LP制作　｜　LINE構築<br>SNS運用サポート　｜　SEO　｜　AI導入支援</p>
+          <a href="Contact.html" class="btn-pill btn-pill--dark">お問い合わせはこちら<span class="btn-pill__arrow">→</span></a>
+          <div class="stage-intro__scroll">
+            <span>Scroll</span>
+            <span class="stage-intro__scroll-line"></span>
+          </div>
         </div>
       </div>
-      <div class="hero__scroll">
-        <img src="assets/images/chevron-thin.png" alt="">
+
+      <!-- STAGE 2: existing Japanese hero, fades/cascades in via scroll progress -->
+      <div class="hero__content">
+        <span class="hero__eyebrow" data-reveal="0.05,0.35" data-reveal-mode="wipe">SHIRAUME DIGITAL</span>
+        <h2 class="hero__title"><span class="hero-title-line hero-title-line--1" data-reveal="0.15,0.5" data-reveal-mode="wipe-down">ともに、</span><br><span class="hero-title-line hero-title-line--2" data-reveal="0.3,0.65" data-reveal-mode="wipe-down">未来を、作ろう。</span></h2>
+        <p class="hero__desc" data-reveal="0.45,0.75" data-reveal-mode="wipe">シンプルで洗練されたデザインと、成果につながる<br class="br-desktop">Web制作・デジタル支援を。新世代のデジタルパートナー。</p>
+        <div class="hero__actions hero__actions--single" data-reveal="0.55,0.85" data-reveal-mode="fade">
+          <a href="Services.html" class="btn-pill btn-pill--ghost">サービスを見る<span class="btn-pill__arrow">→</span></a>
+        </div>
       </div>
     </header>
   </div>
