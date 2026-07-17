@@ -1413,6 +1413,15 @@ img {
   line-height: 1.9;
 }
 
+/* Two-button row (お問い合わせ + LINE) under the CTA copy - wraps to a
+   stacked column on narrow screens so neither button ever gets cramped. */
+.cta-home__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 4px;
+}
+
 /* ---------- Pill buttons (TOP page only: Hero CTAs + photo CTA section,
    referencing findrealestate.com's capsule-shaped buttons) ---------- */
 
@@ -2817,6 +2826,8 @@ img {
   .hero__title { font-size: 38px; line-height: 1.4; letter-spacing: 0.02em; }
   .hero__desc { font-size: 15px; max-width: 100%; }
   .hero__actions { flex-direction: column; width: 100%; gap: 12px; margin-top: 4px; }
+  .cta-home__actions { flex-direction: column; width: 100%; gap: 12px; }
+  .cta-home__actions .btn-pill { width: 100%; text-align: center; justify-content: center; }
   .stage-intro__content { padding: 0 24px; gap: 18px; }
   .stage-intro__title { font-size: 32px; }
   .stage-intro__subtitle { font-size: 13px; }
