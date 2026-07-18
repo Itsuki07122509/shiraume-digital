@@ -1050,7 +1050,7 @@ img {
 
 .strength-item__num {
   font-family: 'Cormorant Garamond', 'Shippori Mincho', serif;
-  font-size: 11.5px;
+  font-size: 17px;
   font-weight: 600;
   letter-spacing: 0.18em;
   color: #a9b6ac;
@@ -1118,8 +1118,10 @@ img {
 }
 
 .strength-item__title {
-  font-size: 14.5px;
-  font-weight: 600;
+  font-size: 15.5px;
+  font-weight: 700;
+  font-family: 'Shippori Mincho', serif;
+  letter-spacing: 0.03em;
   margin-bottom: 4px;
 }
 
