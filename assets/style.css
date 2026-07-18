@@ -417,12 +417,12 @@ img {
   position: relative;
   /* .page already reserves 84px of padding-top for the fixed nav, so
      subtract that here for the full remaining screen height, then take
-     ~78% of it - the last ~22% is left deliberately short so Stage 2's
-     photo already peeks in from the bottom of the very first view. This
-     is what makes the hand-off feel like a continuation of the same
-     scene rather than a hard cut into a new page. */
-  height: calc((100vh - 84px) * 0.78);
-  height: calc((100dvh - 84px) * 0.78);
+     ~90% of it - only a slim sliver of Stage 2's photo peeks in from the
+     bottom of the very first view (just enough to hint at what's below),
+     pushing the point where the hand-off actually begins further down the
+     scroll instead of showing a big slice of the photo immediately at rest. */
+  height: calc((100vh - 84px) * 0.9);
+  height: calc((100dvh - 84px) * 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2866,7 +2866,7 @@ img {
   /* Nav → hamburger */
   .nav { padding-left: 20px !important; padding-right: 20px !important; height: 68px; }
   .page { padding-top: 68px; }
-  .stage-intro { height: calc((100vh - 68px) * 0.82); height: calc((100dvh - 68px) * 0.82); }
+  .stage-intro { height: calc((100vh - 68px) * 0.92); height: calc((100dvh - 68px) * 0.92); }
   .hero__top-fade { height: 16vh; }
   .nav__brand-name { font-size: 15px; }
   .nav--minimal .nav__brand-name { font-size: 16px; }
@@ -2904,8 +2904,8 @@ img {
   .cta-home__actions .btn-pill { width: 100%; text-align: center; justify-content: center; }
   .stage-intro__content { padding: 0 24px; gap: 18px; }
   .stage-intro__title { font-size: 32px; }
-  .stage-intro__subtitle { font-size: 13px; }
-  .stage-intro__services { font-size: 12.5px; }
+  .stage-intro__subtitle { font-size: 13.5px; font-weight: 500; color: #1a1a1a; }
+  .stage-intro__services { font-size: 12.5px; font-weight: 500; color: #48483f; }
   .hero__actions a { text-align: center; width: 100%; padding-top: 18px; padding-bottom: 18px; }
 
   .subhero--460, .subhero--420 { height: 340px; }
@@ -3025,7 +3025,7 @@ img {
   .work-card__image img { height: 190px; }
   .work-card__image--placeholder { height: 190px; }
 
-  .plum-branch { height: 30vh; top: 78px; left: -34px; max-width: 260px; }
+  .plum-branch { height: 20vh; top: 56px; left: -42px; max-width: 168px; opacity: 0.55; }
 
   .works-grid-card__image { height: 160px; }
 
