@@ -3111,3 +3111,49 @@ img {
   .block-title--30,
   .block-title--28 { font-size: 24px; }
 }
+
+/* ---------- v15: JP/EN language toggle buttons (nav) ---------- */
+/* The static "JP|EN" label is now two real buttons on pages where the
+   toggle is wired up (currently index.html). Pages still using the plain
+   span are unaffected. */
+
+.nav__lang-btn {
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font: inherit;            /* picks up .nav__lang's size, incl. mobile 12px */
+  letter-spacing: 0.04em;
+  color: #b8b8b4;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.nav__lang-btn:hover {
+  color: #4a4a48;
+}
+
+.nav__lang-btn.is-active {
+  color: #4a4a48;
+  font-weight: 600;
+}
+
+/* ---------- v15: draggable works marquee ---------- */
+/* .works-track--js is added by main.js when it takes over the marquee;
+   the keyframe animation above stays as a no-JS fallback. */
+
+.works-track--js {
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: pan-y;      /* horizontal drag = marquee, vertical = page scroll */
+}
+
+.works-track--js.is-dragging {
+  cursor: grabbing;
+}
+
+.works-track--js img {
+  -webkit-user-drag: none;
+  pointer-events: none;     /* keeps pointer capture on the track itself */
+}
