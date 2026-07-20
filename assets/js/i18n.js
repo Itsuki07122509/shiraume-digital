@@ -623,10 +623,22 @@
     var raw = node.nodeValue;
     var key = raw.trim();
     if (!key) continue;
+    var en = null;
     if (Object.prototype.hasOwnProperty.call(TEXT, key)) {
-      entries.push({ node: node, ja: raw, en: raw.replace(key, TEXT[key]) });
+      en = raw.replace(key, TEXT[key]);
     } else if (key.indexOf('¥') !== -1 && JP_CHARS.test(key)) {
-      entries.push({ node: node, ja: raw, en: raw.replace(key, translatePrice(key)) });
+      en = raw.replace(key, translatePrice(key));
+    }
+    if (en !== null) {
+      // Japanese needs no space around <br>, but English does: when a
+      // responsive <br class="br-mobile/br-desktop"> is hidden by CSS the
+      // two fragments would otherwise concatenate ("Vision,Guiding").
+      // A trailing space is harmless when the <br> is visible.
+      var next = node.nextSibling;
+      if (next && next.nodeType === 1 && next.nodeName === 'BR' && !/\s$/.test(en)) {
+        en += ' ';
+      }
+      entries.push({ node: node, ja: raw, en: en });
     }
   }
 
